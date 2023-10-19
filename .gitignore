@@ -3,7 +3,11 @@ DerivedDataCache
 Intermediate
 Saved
 Build
+Platforms
+Plugins
 
+.idea
+.vsconfig
 .vscode
 .vs
 *.VC.db
@@ -14,3 +18,4 @@ Build
 *.suo
 *.xcodeproj
 *.xcworkspace
+*.uproject.DotSettings.user
