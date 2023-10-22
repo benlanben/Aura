@@ -27,12 +27,9 @@ class AURA_API AAuraPlayerController : public APlayerController
 
 	void Move(const FInputActionValue& InputActionValue);
 	void CursorTrace();
-
-	UPROPERTY()
-	TObjectPtr<IEnemyInterface> LastActor;
-	UPROPERTY()
-	TObjectPtr<IEnemyInterface> ThisActor;
 	
+	IEnemyInterface* LastActor;
+	IEnemyInterface* ThisActor;	
 	
 public:
 	AAuraPlayerController();
