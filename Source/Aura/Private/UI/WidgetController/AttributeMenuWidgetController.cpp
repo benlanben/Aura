@@ -12,14 +12,14 @@
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
 	check(AttributeInfo);
-	for (auto& Pair : GetAuraAS()->TagsToAttributes)
+	for (auto& Tag : AttributeInfo.Get()->AttributeInformation)
 	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
-		[this, Pair](const FOnAttributeChangeData& Data)
-		{
-			BroadcastAttributeInfo(Pair.Key, Pair.Value());
-		}
-	);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Tag.AttributeGetter).AddLambda(
+		[this, Tag](const FOnAttributeChangeData& Data)
+			{
+				BroadcastAttributeInfo(Tag.AttributeTag);
+			}
+		);	
 	}
 	
 	GetAuraPS()->OnAttributePointsChangedDelegate.AddLambda(
@@ -32,20 +32,14 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 	check(AttributeInfo);
 
-	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = AS->GetStrength();
-	AttributeInfoDelegate.Broadcast(Info);
-	
-	
-	for (auto& Pair : AS->TagsToAttributes)
+	for (auto& Tag : AttributeInfo.Get()->AttributeInformation)
 	{
-		BroadcastAttributeInfo(Pair.Key, Pair.Value());
+		BroadcastAttributeInfo(Tag.AttributeTag);
 	}
 	
-	AttributePointsChangedDelegate.Broadcast(GetAuraPS()->GetAttributePoints()); 
+	AttributePointsChangedDelegate.Broadcast(GetAuraPS()->GetAttributePoints());	
 }
 /*
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
@@ -54,9 +48,9 @@ void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& Attrib
 	AuraASC->UpgradeAttribute(AttributeTag);
 }
 */
-void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const
+void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag) const
 {
 	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
-	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
+	Info.AttributeValue = Info.AttributeGetter.GetNumericValue(AttributeSet);
 	AttributeInfoDelegate.Broadcast(Info);
 }

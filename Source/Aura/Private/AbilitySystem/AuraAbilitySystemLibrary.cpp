@@ -2,9 +2,6 @@
 
 
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
-#include "AuraGameplayTags.h"
-#include "Game/AuraGameModeBase.h"
-#include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"

@@ -26,7 +26,7 @@ void AAuraEnemy::HighlightActor()
 	Weapon->SetRenderCustomDepth(true);	
 }
 
-void AAuraEnemy::UnHighlightActor()
+void AAuraEnemy::UnhighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
