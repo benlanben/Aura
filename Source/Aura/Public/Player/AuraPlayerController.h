@@ -36,13 +36,16 @@ class AURA_API AAuraPlayerController : public APlayerController
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> MoveAction;
+
+	void Move(const FInputActionValue& InputActionValue);
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ShiftAction;
 
 	void ShiftPressed() { bShiftKeyDown = true; };
 	void ShiftReleased() { bShiftKeyDown = false; };
 	bool bShiftKeyDown = false;
-	void Move(const FInputActionValue& InputActionValue);
+	
 	
 	void CursorTrace();
 	FHitResult CursorHit;

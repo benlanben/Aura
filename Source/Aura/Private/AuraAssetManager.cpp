@@ -17,9 +17,9 @@ UAuraAssetManager& UAuraAssetManager::Get()
 void UAuraAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
+	
 	FAuraGameplayTags::InitializeNativeGameplayTags();
-
-	// This is required to use Target Data!
+	// This is required to use Target Data in multiplayer!
 	UAbilitySystemGlobals::Get().InitGlobalData();
 }
 
