@@ -27,6 +27,7 @@ public:
 
 	//~ Begin Combat Interface
 	FORCEINLINE virtual int32 GetCharacterLevel() override { return Level; }
+	virtual void Die() override;
 	//~ End Combat Interface
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
@@ -34,6 +35,16 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnMaxHealthChanged;
+
+	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+
+	UPROPERTY(BlueprintReadOnly, Category = Combat)
+	bool bHitReacting = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Combat)
+	float LifeSpan = 10.f;
+
+	void SetLevel(const int32 InLevel) { Level = InLevel; }
 
 protected:
 	virtual void BeginPlay() override;
