@@ -60,4 +60,6 @@ public:
 	UAnimMontage* GetHitReactMontage();
 
 	virtual void Die() = 0;
+	//virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
+	//virtual FOnDamageSignature& GetOnDamageSignature() = 0; 
 };
