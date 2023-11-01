@@ -54,7 +54,7 @@ public:
 	FOnPlayerStatChanged OnAttributePointsChangedDelegate;
 	//FOnPlayerStatChanged OnSpellPointsChangedDelegate;
 
-	FORCEINLINE int32 GetPlayerLevel() const { return Level; }
+	FORCEINLINE int32 GetCharacterLevel() const { return Level; }
 	//FORCEINLINE int32 GetXP() const { return XP; }
 	FORCEINLINE int32 GetAttributePoints() const { return AttributePoints; }
 	//FORCEINLINE int32 GetSpellPoints() const { return SpellPoints; }

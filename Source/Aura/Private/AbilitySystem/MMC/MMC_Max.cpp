@@ -14,8 +14,11 @@ float UMMC_Max::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec&
 	// empty for now just to pass	
 	FAggregatorEvaluateParameters EvalParams;
 	
-	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
-	const int32 PlayerLevel = CombatInterface->GetCharacterLevel();
+	int32 PlayerLevel = 1;
+	if (Spec.GetContext().GetSourceObject()->Implements<UCombatInterface>())
+	{
+		PlayerLevel = ICombatInterface::Execute_GetCharacterLevel(Spec.GetContext().GetSourceObject());
+	}
  
 	float AttributeContribution = 0.f;
  

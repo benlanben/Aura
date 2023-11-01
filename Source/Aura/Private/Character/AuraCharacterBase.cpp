@@ -3,6 +3,7 @@
 
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
@@ -21,11 +22,6 @@ AAuraCharacterBase::AAuraCharacterBase()
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Weapon->SetCustomDepthStencilValue(250);
-}
-
-UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
-{
-	return HitReactMontage;
 }
 
 void AAuraCharacterBase::Die()
@@ -48,6 +44,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
+	bDead = true;
 }
 
 void AAuraCharacterBase::BeginPlay()
@@ -56,14 +53,38 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
-FVector AAuraCharacterBase::GetCombatSocketLocation()
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon) && IsValid(Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Tail))
+	{
+		return GetMesh()->GetSocketLocation(TailSocketName);
+	}
+	return FVector();
 }
 
-void AAuraCharacterBase::InitAbilityActorInfo()
+FTaggedMontage AAuraCharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
 {
+	for (FTaggedMontage TaggedMontage : AttackMontages)
+	{
+		if (TaggedMontage.MontageTag == MontageTag)
+		{
+			return TaggedMontage;
+		}
+	}
+	return FTaggedMontage();
 }
 
 void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect> GameplayEffectClass, const float Level) const
@@ -93,7 +114,7 @@ void AAuraCharacterBase::AddCharacterAbilities() const
 
 void AAuraCharacterBase::Dissolve()
 {
-	if (IsValid(MeshDissolveMaterialInstance) && IsValid(WeaponDissolveMaterialInstance))
+	if (IsValid(MeshDissolveMaterialInstance))
 	{
 		UMaterialInstanceDynamic* DynamicMeshMatInst = UMaterialInstanceDynamic::Create(MeshDissolveMaterialInstance, this);
 		GetMesh()->SetMaterial(0, DynamicMeshMatInst);
@@ -106,10 +127,3 @@ void AAuraCharacterBase::Dissolve()
 		StartWeaponDissolveTimeline(DynamicWeaponMatInst);
 	}
 }
-
-UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}
-
-

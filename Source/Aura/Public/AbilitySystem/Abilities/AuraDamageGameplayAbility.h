@@ -18,7 +18,7 @@ class AURA_API UAuraDamageGameplayAbility : public UAuraGameplayAbility
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void CauseDamage(AActor* TargetActor);
+	void CauseDamage(AActor* TargetActor) const;
 
 	UFUNCTION(BlueprintPure)
 	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(

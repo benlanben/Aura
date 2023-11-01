@@ -128,9 +128,11 @@ struct FAuraGameplayTags
 	FGameplayTag Message_ManaPotion;
 	FGameplayTag Message_CrystalPotion;
 
+	FGameplayTag Event_Montage_Attack_Melee;
+	FGameplayTag Event_Montage_Attack_Ranged;
 	FGameplayTag Event_Montage_ArcaneShards;
 	FGameplayTag Event_Montage_Electrocute;
-	FGameplayTag Event_Montage_FireBolt;
+	FGameplayTag Event_Montage_FireBolt;	
 
 private:
     static FAuraGameplayTags GameplayTags;

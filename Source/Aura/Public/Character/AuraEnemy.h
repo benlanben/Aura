@@ -30,8 +30,10 @@ public:
 	//~ End Enemy Interface
 
 	//~ Begin Combat Interface
-	FORCEINLINE virtual int32 GetCharacterLevel() override { return Level; }
+	FORCEINLINE virtual int32 GetCharacterLevel_Implementation() override { return Level; }
 	virtual void Die() override;
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override { CombatTarget = InCombatTarget; }
+	FORCEINLINE virtual AActor* GetCombatTarget_Implementation() const override { return CombatTarget; }
 	//~ End Combat Interface
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
@@ -49,6 +51,9 @@ public:
 	float LifeSpan = 10.f;
 
 	void SetLevel(const int32 InLevel) { Level = InLevel; }
+
+	UPROPERTY(BlueprintReadWrite, Category = Combat)
+	TObjectPtr<AActor> CombatTarget;
 
 protected:
 	virtual void BeginPlay() override;
