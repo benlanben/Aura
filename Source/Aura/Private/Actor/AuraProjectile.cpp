@@ -32,7 +32,6 @@ AAuraProjectile::AAuraProjectile()
 	ProjectileMovement->InitialSpeed = 550.f;
 	ProjectileMovement->MaxSpeed = 550.f;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
-
 }
 
 void AAuraProjectile::BeginPlay()
@@ -106,13 +105,12 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	else bHit = true;
 }
 
-
-bool AAuraProjectile::IsValidOverlap(AActor* OtherActor)
+bool AAuraProjectile::IsValidOverlap(const AActor* OtherActor) const
 {
 	if (DamageEffectParams.SourceAbilitySystemComponent == nullptr) return false;
-	AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	if (SourceAvatarActor == OtherActor) return false;
-	//if (!UAuraAbilitySystemLibrary::IsNotFriend(SourceAvatarActor, OtherActor)) return false;
+	if (!UAuraAbilitySystemLibrary::IsNotFriend(SourceAvatarActor, OtherActor)) return false;
 
 	return true;
 }
