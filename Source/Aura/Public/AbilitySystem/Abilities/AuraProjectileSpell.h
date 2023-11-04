@@ -9,6 +9,7 @@
 class AAuraProjectile;
 class UGameplayEffect;
 struct FGameplayTag;
+
 /**
  * 
  */
