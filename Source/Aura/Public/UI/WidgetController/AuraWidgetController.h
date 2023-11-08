@@ -7,7 +7,7 @@
 
 class UAttributeSet;
 class UAbilitySystemComponent;
-//class UAbilityInfo;
+class UAbilityInfo;
 class AAuraPlayerController;
 class AAuraPlayerState;
 class UAuraAbilitySystemComponent;
@@ -36,7 +36,7 @@ struct FWidgetControllerParams
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChangedSignature, int32, NewValue);
-// DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FAuraAbilityInfo&, Info);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FAuraAbilityInfo&, Info);
 
 /**
  * 
@@ -54,9 +54,14 @@ public:
 	virtual void BroadcastInitialValues();
 	virtual void BindCallbacksToDependencies();
 
+	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
+	FAbilityInfoSignature AbilityInfoDelegate;
+
+	void BroadcastAbilityInfo();
+
 protected:
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
-	//TObjectPtr<UAbilityInfo> AbilityInfo;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Widget Controller")
 	TObjectPtr<APlayerController> PlayerController;

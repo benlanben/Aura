@@ -36,6 +36,7 @@ UCLASS()
 class AURA_API UAttributeInfo : public UDataAsset
 {
 	GENERATED_BODY()
+	
 public:
 	FAuraAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false) const;
 
