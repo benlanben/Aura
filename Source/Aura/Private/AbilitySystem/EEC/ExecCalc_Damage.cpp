@@ -92,8 +92,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 	
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+	//ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
+	//ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
 	
 	int32 SourceCharacterLevel = 1;
 	if (SourceAvatar->Implements<UCombatInterface>())
@@ -103,7 +103,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	int32 TargetCharacterLevel = 1;
 	if (TargetAvatar->Implements<UCombatInterface>())
 	{
-		SourceCharacterLevel = ICombatInterface::Execute_GetCharacterLevel(TargetAvatar);
+		TargetCharacterLevel = ICombatInterface::Execute_GetCharacterLevel(TargetAvatar);
 	}
 		
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();	

@@ -29,8 +29,9 @@ struct FUIWidgetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLevelChangedSignature, int32, NewLevel, bool, bLevelUp);
 
 /**
  * 
@@ -46,18 +47,18 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnHealthChanged;
-
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnMaxHealthChanged;
-
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnManaChanged;
-
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnMaxManaChanged;
-
 	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
+	UPROPERTY(BlueprintAssignable, Category="GAS|XP")
+	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
+	UPROPERTY(BlueprintAssignable, Category="GAS|Level")
+	FOnLevelChangedSignature OnPlayerLevelChangedDelegate;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
@@ -67,6 +68,8 @@ protected:
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 
 	void OnInitializeStartupAbilities();
+
+	void OnXPChanged(const int32 NewXP);
 		
 };
 
