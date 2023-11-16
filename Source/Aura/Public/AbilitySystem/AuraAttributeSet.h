@@ -169,20 +169,29 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
 	FGameplayAttributeData IncomingXP;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingXP);
+
+	/*
+	 * Rep Notifies
+	 */
 	
 	UFUNCTION()
-	void OnRep_Strength(const FGameplayAttributeData& OldStrength) const;
+	FORCEINLINE void OnRep_Strength(const FGameplayAttributeData& OldStrength) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Strength, OldStrength); }
 	UFUNCTION()
-	void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const;
+	FORCEINLINE void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Intelligence, OldIntelligence); }
 	UFUNCTION()
-	void OnRep_Resilience(const FGameplayAttributeData& OldResilience) const;
+	FORCEINLINE void OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resilience, OldResilience); }
 	UFUNCTION()
-	void OnRep_Vigor(const FGameplayAttributeData& OldVigor) const;
+	FORCEINLINE void OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Vigor, OldVigor); }
 	UFUNCTION()
-	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
+	FORCEINLINE void OnRep_Health(const FGameplayAttributeData& OldHealth) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Health, OldHealth); }
 	UFUNCTION()
-	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;	
-	
+	FORCEINLINE void OnRep_Mana(const FGameplayAttributeData& OldMana) const
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Mana, OldMana); }
 };
 
 

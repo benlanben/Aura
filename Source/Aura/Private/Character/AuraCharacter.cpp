@@ -4,10 +4,8 @@
 #include "Character/AuraCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
-#include "AbilitySystem/Data/LevelUpInfo.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerController.h"
-#include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
 #include "NiagaraComponent.h"
 #include "Camera/CameraComponent.h"
@@ -56,13 +54,6 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
-void AAuraCharacter::AddToXP_Implementation(const int32 InXP)
-{
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddToXP(InXP);
-}
-
 void AAuraCharacter::MulticastLevelUpParticles_Implementation() const
 {
 	if (IsValid(LevelUpNiagaraComponent))
@@ -75,34 +66,6 @@ void AAuraCharacter::MulticastLevelUpParticles_Implementation() const
 	}
 }
 
-int32 AAuraCharacter::GetXP_Implementation() const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->GetXP();
-}
-
-int32 AAuraCharacter::FindLevelForXP_Implementation(const int32 InXP) const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->LevelUpInfo->FindLevelForXP(InXP);
-}
-
-int32 AAuraCharacter::GetAttributePointsReward_Implementation(const int32 Level) const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->LevelUpInfo->LevelUpInformation[Level].AttributePointAward;
-}
-
-int32 AAuraCharacter::GetSpellPointsReward_Implementation(const int32 Level) const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->LevelUpInfo->LevelUpInformation[Level].SpellPointAward;
-}
-
 void AAuraCharacter::AddToPlayerLevel_Implementation(const int32 InPlayerLevel)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -113,34 +76,6 @@ void AAuraCharacter::AddToPlayerLevel_Implementation(const int32 InPlayerLevel)
 	{
 		//AuraASC->UpdateAbilityStatuses(AuraPlayerState->GetCharacterLevel());
 	}
-}
-
-void AAuraCharacter::AddToAttributePoints_Implementation(const int32 InAttributePoints)
-{
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddToAttributePoints(InAttributePoints);
-}
-
-void AAuraCharacter::AddToSpellPoints_Implementation(const int32 InSpellPoints)
-{
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddToSpellPoints(InSpellPoints);
-}
-
-int32 AAuraCharacter::GetAttributePoints_Implementation() const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->GetAttributePoints();
-}
-
-int32 AAuraCharacter::GetSpellPoints_Implementation() const
-{
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->GetSpellPoints();
 }
 
 void AAuraCharacter::ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial)
@@ -215,11 +150,10 @@ void AAuraCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 	 */
 }
 
-int32 AAuraCharacter::GetCharacterLevel_Implementation()
+AAuraPlayerState* AAuraCharacter::GetAuraPS() const
 {
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	return AuraPlayerState->GetCharacterLevel();
+	check(GetPlayerState<AAuraPlayerState>());
+	return GetPlayerState<AAuraPlayerState>();
 }
 
 void AAuraCharacter::InitAbilityActorInfo()

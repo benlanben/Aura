@@ -32,19 +32,20 @@ class AURA_API AAuraPlayerState : public APlayerState, public  IAbilitySystemInt
 	int32 SpellPoints = 0;
 	
 	UFUNCTION()
-	void OnRep_Level(int32 OldLevel);
+	FORCEINLINE void OnRep_Level(int32 OldLevel) const { OnLevelChangedDelegate.Broadcast(Level, true); }
 	UFUNCTION()
-	void OnRep_XP(int32 OldXP);
+	FORCEINLINE void OnRep_XP(int32 OldXP) const { OnXPChangedDelegate.Broadcast(XP); }
 	UFUNCTION()
-	void OnRep_AttributePoints(int32 OldAttributePoints);
+	FORCEINLINE void OnRep_AttributePoints(int32 OldAttributePoints) const { OnAttributePointsChangedDelegate.Broadcast(AttributePoints); }
 	UFUNCTION()
-	void OnRep_SpellPoints(int32 OldSpellPoints);
+	FORCEINLINE void OnRep_SpellPoints(int32 OldSpellPoints) const { OnSpellPointsChangedDelegate.Broadcast(SpellPoints); }
 	
 public:
 	AAuraPlayerState();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	
+	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
+	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<ULevelUpInfo> LevelUpInfo;

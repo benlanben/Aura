@@ -77,29 +77,5 @@ void AAuraPlayerState::SetSpellPoints(const int32 InPoints)
 	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }
 
-void AAuraPlayerState::OnRep_Level(int32 OldLevel)
-{
-	OnLevelChangedDelegate.Broadcast(Level, true);
-}
-
-void AAuraPlayerState::OnRep_XP(int32 OldXP)
-{
-	OnXPChangedDelegate.Broadcast(XP);
-}
-
-void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
-{
-	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
-}
-
-void AAuraPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
-{
-	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
-}
-
-UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}
 
 
