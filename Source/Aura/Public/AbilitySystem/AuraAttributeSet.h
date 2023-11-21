@@ -56,7 +56,7 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 	bool bTopOffMana = false;
 	
 public:
-	UAuraAttributeSet();
+	UAuraAttributeSet() {}
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;

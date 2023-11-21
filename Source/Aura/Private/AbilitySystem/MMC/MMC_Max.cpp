@@ -5,10 +5,6 @@
 
 #include "Interaction/CombatInterface.h"
 
-UMMC_Max::UMMC_Max()
-{
-}
-
 float UMMC_Max::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// empty for now just to pass	

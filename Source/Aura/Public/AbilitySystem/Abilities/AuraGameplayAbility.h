@@ -18,11 +18,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
-	virtual FString GetDescription(int32 Level);
-	virtual FString GetNextLevelDescription(int32 Level);
-	static FString GetLockedDescription(int32 Level);
+	virtual FString GetDescription(const int32 Level);
+	virtual FString GetNextLevelDescription(const int32 Level);
+	static FString GetLockedDescription(const int32 Level);
 
 protected:
-	float GetManaCost(float InLevel = 1.f) const;
-	float GetCooldown(float InLevel = 1.f) const;
+	float GetManaCost(const float InLevel = 1.f) const;
+	float GetCooldown(const float InLevel = 1.f) const;
 };

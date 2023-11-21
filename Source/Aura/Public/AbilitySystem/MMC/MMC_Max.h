@@ -25,7 +25,5 @@ class AURA_API UMMC_Max : public UGameplayModMagnitudeCalculation
 	float LevelMultiplier = 10.f;
 
 public:
-	UMMC_Max();
-
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 };

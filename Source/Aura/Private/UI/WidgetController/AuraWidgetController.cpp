@@ -7,7 +7,6 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
-//#include "AbilitySystem/Data/AbilityInfo.h"
 
 void UAuraWidgetController::SetWidgetControllerParams(const FWidgetControllerParams& WCParams)
 {
@@ -15,14 +14,6 @@ void UAuraWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 	PlayerState = WCParams.PlayerState;
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
-}
-
-void UAuraWidgetController::BroadcastInitialValues()
-{
-}
-
-void UAuraWidgetController::BindCallbacksToDependencies()
-{
 }
 
 void UAuraWidgetController::BroadcastAbilityInfo()

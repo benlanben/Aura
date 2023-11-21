@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemGlobals.h"
+#include "AuraAbilityTypes.h"
 #include "AuraAbilitySystemGlobals.generated.h"
 
 /**
@@ -14,5 +15,6 @@ class AURA_API UAuraAbilitySystemGlobals : public UAbilitySystemGlobals
 {
 	GENERATED_BODY()
 	
-	virtual FGameplayEffectContext* AllocGameplayEffectContext() const override;
+	FORCEINLINE virtual FGameplayEffectContext* AllocGameplayEffectContext() const override
+	{ return new FAuraGameplayEffectContext(); }
 };

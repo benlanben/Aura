@@ -68,13 +68,11 @@ void AAuraCharacter::MulticastLevelUpParticles_Implementation() const
 
 void AAuraCharacter::AddToPlayerLevel_Implementation(const int32 InPlayerLevel)
 {
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->AddToLevel(InPlayerLevel);
+	GetAuraPS()->AddToLevel(InPlayerLevel);
 
 	if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(GetAbilitySystemComponent()))
 	{
-		//AuraASC->UpdateAbilityStatuses(AuraPlayerState->GetCharacterLevel());
+		AuraASC->UpdateAbilityStatuses(GetAuraPS()->GetCharacterLevel());
 	}
 }
 
