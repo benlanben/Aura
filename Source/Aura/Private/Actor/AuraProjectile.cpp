@@ -92,14 +92,8 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 			}
 			
 			DamageEffectParams.TargetAbilitySystemComponent = TargetASC;
-			//UAuraAbilitySystemLibrary::ApplyDamageEffect(DamageEffectParams);
-		}		
-		
-		if(UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
-		{
-			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
-		}
-		
+			UAuraAbilitySystemLibrary::ApplyDamageEffect(DamageEffectParams);
+		}	
 		Destroy();
 	}
 	else bHit = true;
@@ -108,8 +102,10 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 bool AAuraProjectile::IsValidOverlap(const AActor* OtherActor) const
 {
 	if (DamageEffectParams.SourceAbilitySystemComponent == nullptr) return false;
+	
 	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	if (SourceAvatarActor == OtherActor) return false;
+	
 	if (!UAuraAbilitySystemLibrary::IsNotFriend(SourceAvatarActor, OtherActor)) return false;
 
 	return true;

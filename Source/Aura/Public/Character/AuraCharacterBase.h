@@ -9,6 +9,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UDebuffNiagaraComponent;
 class UNiagaraSystem;
 class UGameplayAbility;
 class UGameplayEffect;
@@ -44,12 +45,17 @@ class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInte
 	
 public:
 	AAuraCharacterBase();
+	virtual void Tick(const float DeltaTime) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual float TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
 	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-
+	FORCEINLINE void SetCharacterClass(const ECharacterClass InClass) { CharacterClass = InClass; }
+	
 	//~ Combat Interface
 	FORCEINLINE virtual UAnimMontage* GetHitReactMontage_Implementation() override { return HitReactMontage; }
-	virtual void Die() override;
+	virtual void Die(const FVector& DeathImpulse) override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	FORCEINLINE virtual bool IsDead_Implementation() const override { return bDead; }
 	FORCEINLINE virtual AActor* GetAvatar_Implementation() override { return this; }
@@ -60,13 +66,31 @@ public:
 	FORCEINLINE virtual void IncrementMinionCount_Implementation(const int32 Amount) override { MinionCount += Amount; }
 	FORCEINLINE virtual ECharacterClass GetCharacterClass_Implementation() override { return CharacterClass; }
 	FORCEINLINE virtual USkeletalMeshComponent* GetWeapon_Implementation() override { return Weapon; }
+	FORCEINLINE virtual FOnASCRegistered& GetOnASCRegisteredDelegate() override { return OnAscRegistered; }
+	FORCEINLINE virtual FOnDeathSignature& GetOnDeathDelegate() override { return OnDeathDelegate; }
+	FORCEINLINE virtual FOnDamageSignature& GetOnDamageSignature() override { return OnDamageDelegate; }
 	//~ End Combat Interface
 
+	FOnASCRegistered OnAscRegistered;
+	FOnDeathSignature OnDeathDelegate;
+	FOnDamageSignature OnDamageDelegate;
+	
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath();
-
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
 	UPROPERTY(EditAnywhere, Category = Combat)
 	TArray<FTaggedMontage> AttackMontages;
+
+	UPROPERTY(ReplicatedUsing=OnRep_Stunned, BlueprintReadOnly)
+	bool bIsStunned = false;
+	UPROPERTY(ReplicatedUsing=OnRep_Burned, BlueprintReadOnly)
+	bool bIsBurned = false;
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	bool bIsBeingShocked = false;
+
+	UFUNCTION()
+	virtual void OnRep_Stunned() {}
+	UFUNCTION()
+	virtual void OnRep_Burned() {}
 	
 protected:
 	virtual void BeginPlay() override;
@@ -100,6 +124,7 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	virtual void InitializeDefaultAttributes() const;
 	void AddCharacterAbilities() const;
+	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
@@ -125,12 +150,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UDebuffNiagaraComponent> StunDebuffComponent;
+
 	/* Minions */
 	int32 MinionCount = 0;
-
-	//UPROPERTY(VisibleAnywhere)
-	//TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;
-
-	//UPROPERTY(VisibleAnywhere)
-	//TObjectPtr<UDebuffNiagaraComponent> StunDebuffComponent;
 };

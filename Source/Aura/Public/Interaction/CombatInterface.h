@@ -49,55 +49,40 @@ class AURA_API ICombatInterface
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	int32 GetCharacterLevel();
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	ECharacterClass GetCharacterClass();
-	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag);
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
 
-	virtual void Die() = 0;
-	//virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
-	//virtual FOnDamageSignature& GetOnDamageSignature() = 0;
-
+	virtual void Die(const FVector& DeathImpulse) = 0;
+	virtual FOnDeathSignature& GetOnDeathDelegate() = 0;
+	virtual FOnDamageSignature& GetOnDamageSignature() = 0;
+	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsDead() const;
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	AActor* GetAvatar();
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TArray<FTaggedMontage> GetAttackMontages();
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FTaggedMontage GetTaggedMontageByTag(const FGameplayTag& MontageTag);
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UNiagaraSystem* GetBloodEffect();
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	int32 GetMinionCount();
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void IncrementMinionCount(int32 Amount);
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	USkeletalMeshComponent* GetWeapon();
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetInShockLoop(bool bInLoop);
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsBeingShocked() const;
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void SetIsBeingShocked(bool bInShock);
-
-	//virtual FOnASCRegistered& GetOnASCRegisteredDelegate() = 0;
+	void SetIsBeingShocked(bool bInShock);	
 };

@@ -19,7 +19,6 @@ class AURA_API AAuraProjectile : public AActor
 
 	UPROPERTY(EditDefaultsOnly)
 	float LifeSpan = 15.f;
-	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> ImpactEffect;
 	UPROPERTY(EditAnywhere)
@@ -32,13 +31,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
-
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle;
-
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
 	FDamageEffectParams DamageEffectParams;
-
 	UPROPERTY()
 	TObjectPtr<USceneComponent> HomingTargetSceneComponent;
 

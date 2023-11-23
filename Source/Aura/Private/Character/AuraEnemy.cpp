@@ -117,29 +117,40 @@ void AAuraEnemy::UnhighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
-void AAuraEnemy::Die()
+void AAuraEnemy::Die(const FVector& DeathImpulse)
 {
 	SetLifeSpan(LifeSpan);
-	if (AuraAIController && AuraAIController->GetBlackboardComponent())
-	{
-		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"), true);
-	}	
-	Super::Die();
+	if (AuraAIController) AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"), true);
+	SpawnLoot();
+	Super::Die(DeathImpulse);
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Debuff_Stun,
+		EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AAuraEnemy::StunTagChanged);
+	
 	if (HasAuthority())
 	{
 		InitializeDefaultAttributes();		
 	}
+	OnAscRegistered.Broadcast(AbilitySystemComponent);
 }
 
 void AAuraEnemy::InitializeDefaultAttributes() const
 {
 	UAuraAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
+}
+
+void AAuraEnemy::StunTagChanged(const FGameplayTag CallbackTag, const int32 NewCount)
+{
+	Super::StunTagChanged(CallbackTag, NewCount);
+	
+	if (AuraAIController && AuraAIController->GetBlackboardComponent())
+	{
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("Stunned"), bIsStunned);
+	}
 }
 
