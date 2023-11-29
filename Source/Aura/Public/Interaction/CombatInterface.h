@@ -76,13 +76,13 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	int32 GetMinionCount();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IncrementMinionCount(int32 Amount);
+	void IncrementMinionCount(const int32 Amount);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	USkeletalMeshComponent* GetWeapon();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetInShockLoop(bool bInLoop);
+	void SetInShockLoop(const bool bInLoop);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsBeingShocked() const;
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void SetIsBeingShocked(bool bInShock);	
+	void SetIsBeingShocked(const bool bInShock);	
 };

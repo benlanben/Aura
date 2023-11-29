@@ -169,6 +169,18 @@ void AAuraCharacter::Die(const FVector& DeathImpulse)
 	TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 }
 
+void AAuraCharacter::OnRep_Burned()
+{
+	if (bIsBurned)
+	{
+		BurnDebuffComponent->Activate();
+	}
+	else
+	{
+		BurnDebuffComponent->Deactivate();
+	}
+}
+
 void AAuraCharacter::OnRep_Stunned()
 {
 	if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
@@ -192,18 +204,6 @@ void AAuraCharacter::OnRep_Stunned()
 	}
 }
 
-void AAuraCharacter::OnRep_Burned()
-{
-	if (bIsBurned)
-	{
-		BurnDebuffComponent->Activate();
-	}
-	else
-	{
-		BurnDebuffComponent->Deactivate();
-	}
-}
-
 AAuraPlayerState* AAuraCharacter::GetAuraPS() const
 {
 	check(GetPlayerState<AAuraPlayerState>());
@@ -219,6 +219,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 	OnAscRegistered.Broadcast(AbilitySystemComponent);
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Debuff_Stun,
+		EGameplayTagEventType::NewOrRemoved).AddUObject(this, &ThisClass::StunTagChanged);
 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{

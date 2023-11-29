@@ -60,6 +60,7 @@ public:
 	//~ Begin Combat Interface
 	FORCEINLINE virtual int32 GetCharacterLevel_Implementation() override { return GetAuraPS()->GetCharacterLevel(); }
 	virtual void Die(const FVector& DeathImpulse) override;
+	FORCEINLINE virtual USkeletalMeshComponent* GetWeapon_Implementation() override { return Weapon; }
 	//~ End Combat Interface
 
 	UPROPERTY(EditDefaultsOnly)
@@ -70,8 +71,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
 
-	virtual void OnRep_Stunned() override;
 	virtual void OnRep_Burned() override;
+	virtual void OnRep_Stunned() override;	
 
 	//void LoadProgress();
 

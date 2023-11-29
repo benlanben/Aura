@@ -18,22 +18,17 @@ public:
 	virtual FString GetNextLevelDescription(const int32 Level) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, bool bOverridePitch, float PitchOverride, AActor* HomingTarget);
+	void SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, const bool bOverridePitch, const float PitchOverride, AActor* HomingTarget);
 
 protected:
-
-	UPROPERTY(EditDefaultsOnly, Category = "FireBolt")
+	UPROPERTY(EditDefaultsOnly, Category = FireBolt)
 	float ProjectileSpread = 90.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "FireBolt")
+	UPROPERTY(EditDefaultsOnly, Category = FireBolt)
 	int32 MaxNumProjectiles = 5;
-
-	UPROPERTY(EditDefaultsOnly, Category = "FireBolt")
+	UPROPERTY(EditDefaultsOnly, Category = FireBolt)
 	float HomingAccelerationMin = 1600.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "FireBolt")
+	UPROPERTY(EditDefaultsOnly, Category = FireBolt)
 	float HomingAccelerationMax = 3200.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "FireBolt")
+	UPROPERTY(EditDefaultsOnly, Category = FireBolt)
 	bool bLaunchHomingProjectiles = true;
 };

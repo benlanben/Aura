@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class AMagicCircle;
 class UDamageTextComponent;
 class UNiagaraSystem;
 class USplineComponent;
@@ -34,7 +35,6 @@ class AURA_API AAuraPlayerController : public APlayerController
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputMappingContext> AuraContext;
-	
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> MoveAction;
 
@@ -49,12 +49,16 @@ class AURA_API AAuraPlayerController : public APlayerController
 	
 	void CursorTrace();
 	FHitResult CursorHit;
-	IEnemyInterface* LastActor = nullptr;
-	IEnemyInterface* ThisActor = nullptr;
+	UPROPERTY()
+	TObjectPtr<AActor> LastActor;
+	UPROPERTY()
+	TObjectPtr<AActor> ThisActor;
+	static void HighlightActor(AActor* InActor);
+	static void UnHighlightActor(AActor* InActor);
 
-	void AbilityInputTagPressed(FGameplayTag InputTag);
-	void AbilityInputTagHeld(FGameplayTag InputTag);
-	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagPressed(const FGameplayTag InputTag);
+	void AbilityInputTagHeld(const FGameplayTag InputTag);
+	void AbilityInputTagReleased(const FGameplayTag InputTag);
 		
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UAuraInputConfig> InputConfig;
@@ -78,19 +82,23 @@ class AURA_API AAuraPlayerController : public APlayerController
 	TObjectPtr<USplineComponent> Spline;
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UNiagaraSystem> ClickNiagaraSystem;
-
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AMagicCircle> MagicCircleClass;
+	UPROPERTY()
+	TObjectPtr<AMagicCircle> MagicCircle;
+
+	void UpdateMagicCircleLocation();
 	
 public:
 	AAuraPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
-
 	UFUNCTION(Client, Reliable)
 	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit);
 	
 protected:
 	virtual void BeginPlay() override;
-	virtual void SetupInputComponent() override;
-	
+	virtual void SetupInputComponent() override;	
 };

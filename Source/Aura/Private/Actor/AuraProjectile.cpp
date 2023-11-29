@@ -49,23 +49,24 @@ void AAuraProjectile::OnHit()
 {
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
-	if (LoopingSoundComponent)
-	{
-		LoopingSoundComponent->Stop();
-		LoopingSoundComponent->DestroyComponent();
-	}
+	StopAndDestroyLoopingSound();
 	bHit = true;
 }
 
 void AAuraProjectile::Destroyed()
+{
+	StopAndDestroyLoopingSound();
+	if (!bHit && !HasAuthority()) OnHit();
+	Super::Destroyed();
+}
+
+void AAuraProjectile::StopAndDestroyLoopingSound() const
 {
 	if (LoopingSoundComponent)
 	{
 		LoopingSoundComponent->Stop();
 		LoopingSoundComponent->DestroyComponent();
 	}
-	if (!bHit && !HasAuthority()) OnHit();
-	Super::Destroyed();
 }
 
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -75,7 +76,7 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 	if (!bHit) OnHit();
 	
 	if (HasAuthority())
-	{	
+	{
 		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 		{
 			const FVector DeathImpulse = GetActorForwardVector() * DamageEffectParams.DeathImpulseMagnitude;
@@ -93,7 +94,8 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 			
 			DamageEffectParams.TargetAbilitySystemComponent = TargetASC;
 			UAuraAbilitySystemLibrary::ApplyDamageEffect(DamageEffectParams);
-		}	
+		}
+		
 		Destroy();
 	}
 	else bHit = true;
@@ -101,7 +103,7 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 bool AAuraProjectile::IsValidOverlap(const AActor* OtherActor) const
 {
-	if (DamageEffectParams.SourceAbilitySystemComponent == nullptr) return false;
+	if (!DamageEffectParams.SourceAbilitySystemComponent) return false;
 	
 	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	if (SourceAvatarActor == OtherActor) return false;

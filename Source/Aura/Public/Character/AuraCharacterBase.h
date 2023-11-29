@@ -9,6 +9,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UPassiveNiagaraComponent;
 class UDebuffNiagaraComponent;
 class UNiagaraSystem;
 class UGameplayAbility;
@@ -30,7 +31,7 @@ class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInte
 	
 	UPROPERTY(EditAnywhere, Category = Combat)
 	TObjectPtr<UAnimMontage> HitReactMontage;
-	/*
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPassiveNiagaraComponent> HaloOfProtectionNiagaraComponent;
 
@@ -39,7 +40,7 @@ class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInte
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPassiveNiagaraComponent> ManaSiphonNiagaraComponent;
-	*/
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> EffectAttachComponent;
 	
@@ -69,6 +70,8 @@ public:
 	FORCEINLINE virtual FOnASCRegistered& GetOnASCRegisteredDelegate() override { return OnAscRegistered; }
 	FORCEINLINE virtual FOnDeathSignature& GetOnDeathDelegate() override { return OnDeathDelegate; }
 	FORCEINLINE virtual FOnDamageSignature& GetOnDamageSignature() override { return OnDamageDelegate; }
+	FORCEINLINE virtual void SetIsBeingShocked_Implementation(const bool bInShock) override { bIsBeingShocked = bInShock; }
+	FORCEINLINE virtual bool IsBeingShocked_Implementation() const override { return bIsBeingShocked; }
 	//~ End Combat Interface
 
 	FOnASCRegistered OnAscRegistered;
@@ -80,17 +83,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	TArray<FTaggedMontage> AttackMontages;
 
-	UPROPERTY(ReplicatedUsing=OnRep_Stunned, BlueprintReadOnly)
-	bool bIsStunned = false;
 	UPROPERTY(ReplicatedUsing=OnRep_Burned, BlueprintReadOnly)
 	bool bIsBurned = false;
+	UPROPERTY(ReplicatedUsing=OnRep_Stunned, BlueprintReadOnly)
+	bool bIsStunned = false;	
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	bool bIsBeingShocked = false;
 
 	UFUNCTION()
-	virtual void OnRep_Stunned() {}
-	UFUNCTION()
 	virtual void OnRep_Burned() {}
+	UFUNCTION()
+	virtual void OnRep_Stunned() {}	
 	
 protected:
 	virtual void BeginPlay() override;
@@ -124,7 +127,8 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	virtual void InitializeDefaultAttributes() const;
 	void AddCharacterAbilities() const;
-	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+	
+	virtual void StunTagChanged(const FGameplayTag CallbackTag,const int32 NewCount);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
