@@ -66,12 +66,12 @@ public:
 	FGameplayTag GetStatusFromAbilityTag(const FGameplayTag& AbilityTag);
 	FGameplayTag GetSlotFromAbilityTag(const FGameplayTag& AbilityTag);
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
+	FGameplayAbilitySpec* GetSpecWithSlot(const FGameplayTag& Slot);
 	
 	bool IsPassiveAbility(const FGameplayAbilitySpec& Spec) const;
 	bool SlotIsEmpty(const FGameplayTag& Slot);
 	static bool AbilityHasSlot(const FGameplayAbilitySpec& Spec, const FGameplayTag& Slot);
-	static bool AbilityHasAnySlot(const FGameplayAbilitySpec& Spec);
-	FGameplayAbilitySpec* GetSpecWithSlot(const FGameplayTag& Slot);	
+	static bool AbilityHasAnySlot(const FGameplayAbilitySpec& Spec);		
 	static void AssignSlotToAbility(FGameplayAbilitySpec& Spec, const FGameplayTag& Slot);
 	static void ClearSlot(FGameplayAbilitySpec* Spec);
 	void ClearAbilitiesOfSlot(const FGameplayTag& Slot);
